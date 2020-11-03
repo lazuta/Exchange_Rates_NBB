@@ -118,25 +118,14 @@ Telegram::Bot::Client.run(TOKEN) do |bot|
                         url = "https://www.nbrb.by/api/exrates/currencies"
                         response = HTTParty.get(url)
 
-                        currency_code = Array.new
                         codies = ""
 
                         for code in response
-                            add_mode = true
-
-                            for currency in currency_code
-                                if code["Cur_Abbreviation"] == currency
-                                    add_mode = false
-                                end
-                            end 
-
-                            if add_mode
+                            # Ради этой строки я встал в 3 ночи, т.к. она тупо приснилась
+                            if !codies.include? code["Cur_Abbreviation"]
                                 codies += "#{code["Cur_Abbreviation"]} - #{code["Cur_Name"]}\n"
                             end 
-
-                            currency_code.push(code["Cur_Abbreviation"])
                         end
-
                     
                         bot.api.send_message(
                             chat_id: message.chat.id,
